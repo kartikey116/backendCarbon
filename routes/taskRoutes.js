@@ -1,6 +1,6 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
-const authMiddleware = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/authmiddleware');
 
 // --- Imports for Cloud Storage (Backblaze B2 / AWS S3) ---
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
