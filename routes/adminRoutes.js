@@ -2,7 +2,7 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const { sendOtpEmail } = require('../services/emailService');
-const authMiddleware = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/authmiddleware');
 const isAdmin = require('../middleware/adminmiddleware');
 
 const prisma = new PrismaClient();
