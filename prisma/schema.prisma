@@ -1,0 +1,69 @@
+// In prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+
+model Industry {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  tier      Int      
+  status    String   @default("PENDING_APPROVAL")
+  isActive  Boolean  @default(false)
+  role      String   @default("INDUSTRY") 
+  walletAddress String?  
+  projectId     Int?  
+  tasks     VerificationTask[]
+}
+
+model Verifier {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  status    String   @default("PENDING_APPROVAL")
+  isActive  Boolean  @default(false)
+  role      String   @default("VERIFIER") 
+  tasks     VerificationTask[]
+}
+model PublicUser {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  isActive  Boolean  @default(false) // Needs OTP verification but not admin approval
+}
+
+model VerificationTask {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  dueDate     DateTime
+  status      String   // e.g., "ASSIGNED", "COMPLETED", "APPROVED"
+
+  industry    Industry @relation(fields: [industryId], references: [id])
+  industryId  Int
+
+  verifier    Verifier @relation(fields: [verifierId], references: [id])
+  verifierId  Int
+  transactionHash String?
+  tokenId         Int?
+
+  evidenceLinks String[]
+}
+
+model OTP {
+    id        Int      @id @default(autoincrement())
+    email     String?
+    mobile    String?
+    code      String
+    expiresAt DateTime
+}
